@@ -5,18 +5,23 @@ import bisect
 
 app = FastAPI()
 
-class Product(BaseModel):
+class Product():
     id: int
     name: str
     categories: List[List[Any]] #Lista que contiene las categorias a las cuales pertenece el producto y su ponderación
     #imagen
     #precio: float
 
-class Client(BaseModel):
+    def __init__(self, id, name, categories):
+        self.id = id
+        self.name = name
+        self.categories = categories
+
+class Client():
     id : int
     user : str
     categories : Dict[str,int]
-    boughtProducts : set[Product]
+    boughtProducts : Set[Product]
     preferences : List[str]
     restrictions : List[str]
     allProducts : Set[Product]
