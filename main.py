@@ -9,8 +9,10 @@ class Product(BaseModel):
     id: int
     name: str
     categories: List[List[Any]] #Lista que contiene las categorias a las cuales pertenece el producto y su ponderación
+    #imagen
+    #precio: float
 
-class Cliente(BaseModel):
+class Client(BaseModel):
     id : int
     user : str
     categories : Dict[str,int]
@@ -18,6 +20,15 @@ class Cliente(BaseModel):
     preferences : List[str]
     restrictions : List[str]
     allProducts : Set[Product]
+
+    def __init__(self,id,user,categories, bP, pref, rest, all):
+        self.id = id
+        self.user = user
+        self.categories = categories
+        self.boughtProducts = bP
+        self.preferences = pref
+        self.restrictions = rest
+        self.allProducts = all
 
     def ponderate(self, product: Product) -> float:
         score = 0.0
@@ -66,6 +77,25 @@ class SortedListProducts():
                 l.append[i[2]]
         return l
 
+#SIMULATED DATA
 
+all_products = [Product(0,"cereales_choco",[["Cereales", 0.8],["Chocolate", 0.4]]), Product(1,"chuleta_cerdo",[["Cerdo", 1],["Charcuteria", 0.2]])]
+client = Client(1,"User1", {"Cerdo": 7}, {Product(1,"chuleta_cerdo",[["Cerdo", 1],["Charcuteria", 0.2]])}, ["Charcuteria"], ["Sin-Gluten"],all_products)
 
+#ENDPOINTS
 
+@app.get("/allProducts")
+def get_all_products():
+    return all_products
+
+@app.get("/recommendedProducts")
+def get_recommended_products():
+    return client.recommend(5)
+
+@app.get("/id")
+def get_id():
+    return client.id
+
+@app.get("/user")
+def get_user():
+    return client.user
